@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "conventional-commits-cli": "^1.0.0"
+  }
+}
