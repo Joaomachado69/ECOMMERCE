@@ -1,18 +1,19 @@
-FROM python:3.11
+# Use the official Python image as a parent image
+FROM python:3.9
 
+# Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-WORKDIR /code
+# Set the working directory in the container
+WORKDIR /app
 
-RUN apt-get update && apt-get install -y netcat
-
-COPY requirements.txt /code/
+# Install dependencies
+COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . /code/
+# Copy the project code into the container
+COPY . /app/
 
-
-
-##docker build -t myproject .
-##ocker run -it myproject bash
+# Run the Django application
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

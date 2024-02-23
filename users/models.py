@@ -1,6 +1,26 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+import logging
+from .tasks import recalcula_avaliacao_media_produto
+
+
+recalcula_avaliacao_media_produto.delay(produto_id)
+#celery -A seu_projeto worker -l info
+
+
+logger = logging.getLogger(__name__)
+
+class Product(models.Model):
+    # Seu código de modelo aqui...
+
+    def save(self, *args, **kwargs):
+        logger.info(f"Produto '{self.name}' foi salvo.")
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        logger.info(f"Produto '{self.name}' foi deletado.")
+        super().delete(*args, **kwargs)
 
 class User(models.Model):
     id = models.AutoField(primary_key=True)

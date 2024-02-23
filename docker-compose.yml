@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: ecommerce
+      POSTGRES_USER: joao_machado
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "5431:5431"
+  
+  django:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+  
+  celery_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: celery -A ecommerce worker --loglevel=info
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+
+  celery_beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: celery -A ecommerce beat --loglevel=info
+    volumes:
+      - .:/app
+    depends_on:
+      - db

@@ -1,0 +1,50 @@
+# E-commerce Web App
+
+Este é um projeto de e-commerce desenvolvido em Django, utilizando Django REST Framework, Celery, Docker e OAuth2.
+
+## Requisitos
+
+Para executar este projeto, você precisará ter o Docker instalado em sua máquina. Certifique-se de ter o Docker instalado antes de prosseguir.
+
+## Instalação
+
+Clone o repositório:
+git clone https://github.com/Joaomachado69/ECOMMERCE.git
+
+Navegue até o diretório do projeto:
+
+cd ECOMMERCE
+
+Crie um ambiente virtual (opcional, mas recomendado):
+
+python -m venv venv_ecommerce
+
+Ative o ambiente virtual:
+
+No Windows:
+venv_ecommerce\Scripts\activate
+
+No Linux/macOS:
+source venv_ecommerce/bin/activate
+
+Instale as dependências do projeto:
+
+pip install -r requirements.txt
+
+# Configuração do Docker
+
+Este projeto inclui um arquivo docker-compose.yml para facilitar a execução da aplicação com Docker. Certifique-se de ter o Docker instalado e configurado corretamente em sua máquina antes de prosseguir.
+
+Execute o comando docker-compose para construir e iniciar os serviços:
+
+docker-compose up -d --build
+
+Acesse a aplicação em seu navegador usando o endereço:
+
+http://localhost:8000
+
+# Observações
+Certifique-se de ajustar as configurações de banco de dados e outras configurações conforme necessário, de acordo com as configurações do seu projeto Django.
+Para mais informações sobre o uso do Celery, consulte a documentação oficial em https://docs.celeryproject.org/en/stable/.
+Para mais informações sobre a configuração do Docker, consulte a documentação oficial em https://docs.docker.com/.
+Este projeto foi desenvolvido como exemplo educacional e pode ser estendido e personalizado conforme necessário.
