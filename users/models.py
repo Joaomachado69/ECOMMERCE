@@ -3,17 +3,38 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 import logging
 from .tasks import recalcula_avaliacao_media_produto
+from elasticsearch import Elasticsearch
+from django.conf import settings
 
 
-recalcula_avaliacao_media_produto.delay(produto_id)
-#celery -A seu_projeto worker -l info
+
+
+
+
+es = Elasticsearch([{'host': settings.ELASTICSEARCH_HOST, 'port': settings.ELASTICSEARCH_PORT}])
+
+class Product(models.Model):
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        es.index(index='products', id=self.pk, body={
+            'name': self.name,
+            'description': self.description,
+        })
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        es.delete(index='products', id=self.pk)
+
+
+#recalcula_avaliacao_media_produto.delay(produto_id)
+#celery -A ecommerce worker -l info
 
 
 logger = logging.getLogger(__name__)
 
 class Product(models.Model):
-    # Seu código de modelo aqui...
-
+    
     def save(self, *args, **kwargs):
         logger.info(f"Produto '{self.name}' foi salvo.")
         super().save(*args, **kwargs)
@@ -46,3 +67,14 @@ class CustomerReview(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     customer = models.ForeignKey(User, on_delete=models.CASCADE)
     rating = models.IntegerField()
+
+
+class ShoppingCart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    products = models.ManyToManyField(Product, through='CartItem')
+
+
+class CartItem(models.Model):
+    shopping_cart = models.ForeignKey(ShoppingCart, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)

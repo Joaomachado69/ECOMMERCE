@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+ELASTICSEARCH_HOST = 'localhost'  
+ELASTICSEARCH_PORT = 9200 
 
 # Application definition
 

@@ -2,7 +2,8 @@ from django.shortcuts import render
 from rest_framework import generics
 from .models import User
 from.serializer import UserSerializer
-
+from django.http import JsonResponse
+from .search import search_products
 
 
 
@@ -18,3 +19,10 @@ class UserRetrieveUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+
+
+
+def product_search(request):
+    query = request.GET.get('q', '')
+    results = search_products(query)
+    return JsonResponse(results, safe=False)
